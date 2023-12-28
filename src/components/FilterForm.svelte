@@ -37,7 +37,7 @@
 </script>
 
 <Form>
-	<div class="container">
+	<div class="">
 		<div class="row">
 			<div class="col">
 				<FormGroup>

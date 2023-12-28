@@ -148,12 +148,12 @@
 
 <Styles />
 
-<main class="container-fluid d-flex flex-column min-vh-100">
-	<header class="">
+<main class="d-flex flex-column min-vh-100">
+	<header class="border-bottom">
 		<h1>Release Finder</h1>
 	</header>
 	<br />
-	<section class=" flex-grow-1">
+	<section class="flex-grow-1">
 		<div class="container">
 			<div class="row">
 				<div class="col">
@@ -163,7 +163,7 @@
 
 			{#if showReleases}
 				<div class="row">
-					<div class="col mt-1">
+					<div class="col mt-2">
 						<FilterForm {onSubmit} />
 					</div>
 				</div>
@@ -178,7 +178,7 @@
 			{/if}
 		</div>
 	</section>
-	<footer class="">
+	<footer class="border-top">
 		<p class="text-center">By Iván Sánchez Díaz</p>
 	</footer>
 </main>
