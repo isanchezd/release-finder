@@ -1,5 +1,5 @@
 <script>
-	import { Styles } from '@sveltestrap/sveltestrap';
+	import { Spinner, Styles } from '@sveltestrap/sveltestrap';
 	import SearchRepo from '../components/SearchRepo.svelte';
 	import ReleasesList from '../components/ReleasesList.svelte';
 	import { isValidUrl, splitUrl, isDateBetweenInterval } from '../helpers';
@@ -169,7 +169,7 @@
 				</div>
 
 				{#if loading}
-					<p>loading...</p>
+					<Spinner size="lg" color="primary" />
 				{:else if releases.length > 0}
 					<ReleasesList {releases} />
 				{:else}
