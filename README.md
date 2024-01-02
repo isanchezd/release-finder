@@ -30,7 +30,7 @@ npm install
 This command will install all the necessary packages to work with the repository.
 
 
-## Development
+## Development
 
 After installing all the project dependencies, to start the project, run the following command:
 
@@ -38,7 +38,7 @@ After installing all the project dependencies, to start the project, run the fol
 npm run dev
 ```
 
-## Building
+## Building
 
 To build for production environments, run the following command:
 
@@ -64,7 +64,7 @@ npm run check
 npm run check:watch
 ```
 
-## Formating & linting
+## Formating & linting
 
 To check if the code complies with the defined linting rules, run the following command:
 
@@ -78,7 +78,7 @@ To format the code according to the defined rules, run the following command:
 npm run format
 ```
 
-## Testing
+## Testing
 
 To execute the battery of tests, both end-to-end and unit tests, run the following command:
 
@@ -98,7 +98,7 @@ If you want to run only end-to-end tests:
 npm run test:e2e
 ```
 
-## Contributing
+## Contributing
 
 If you have any suggestions on how to make this project better, please fork the repository and create a PR. Don't forget to give it a star =)
 
@@ -108,7 +108,7 @@ If you have any suggestions on how to make this project better, please fork the 
 4. Push to the branch (git push origin feature/AmazingFeature)
 5. Open a PR
 
-## License
+## License
 
 Distributed under the GPL3 License. See LICENSE.txt for more information.
 
