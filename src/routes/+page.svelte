@@ -5,8 +5,7 @@
 	import FilterForm from '../components/FilterForm.svelte';
 	import { isValidUrl, splitUrl, isDateBetweenInterval } from '../helpers';
 	import { getReleases } from '../repository';
-	import { t } from "../i18n";
-
+	import { t } from '../i18n';
 
 	/**
 	 * @typedef Author
@@ -152,7 +151,7 @@
 
 <main class="d-flex flex-column min-vh-100">
 	<header class="border-bottom p-2">
-		<h1>{$t("page.title")}</h1>
+		<h1>{$t('page.title')}</h1>
 	</header>
 	<br />
 	<section class="flex-grow-1">
@@ -175,12 +174,17 @@
 				{:else if releases.length > 0}
 					<ReleasesList {releases} />
 				{:else}
-					<p>{$t("page.no-results")}</p>
+					<p>{$t('page.no-results')}</p>
 				{/if}
 			{/if}
 		</div>
 	</section>
 	<footer class="border-top">
-		<p class="text-center"><a class="link-offset-2 link-underline link-underline-opacity-0" href="mailto:sanchez.diaz.ivan@gmail.com">{$t("page.contact")}</a></p>
+		<p class="text-center">
+			<a
+				class="link-offset-2 link-underline link-underline-opacity-0"
+				href="mailto:sanchez.diaz.ivan@gmail.com">{$t('page.contact')}</a
+			>
+		</p>
 	</footer>
 </main>

@@ -8,8 +8,7 @@
 		CardTitle
 	} from '@sveltestrap/sveltestrap';
 	import SvelteMarkdown from 'svelte-markdown';
-	import { t } from "../i18n";
-
+	import { t } from '../i18n';
 
 	/**
 	 * @typedef Author
@@ -47,7 +46,7 @@
 		><div>
 			<div class="row">
 				<div class="col">
-					{$t("page.created-by")}: <a href={release.author.html_url}>{release.author.login}</a>
+					{$t('page.created-by')}: <a href={release.author.html_url}>{release.author.login}</a>
 				</div>
 				<div class="col">
 					<p>{release.created_at}</p>

@@ -5,10 +5,10 @@ export const locale = writable('en');
 export const locales = Object.keys(translations);
 
 /**
- * 
- * @param {string} locale 
- * @param {string} key 
- * @param {any} vars 
+ *
+ * @param {string} locale
+ * @param {string} key
+ * @param {any} vars
  * @returns {string}
  */
 const translate = (locale, key, vars) => {
@@ -30,7 +30,7 @@ const translate = (locale, key, vars) => {
 	});
 
 	return text;
-}
+};
 
 export const t = derived(
 	locale,

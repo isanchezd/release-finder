@@ -1,8 +1,6 @@
 <script>
 	import { Form, FormGroup, Input, Label, Button } from '@sveltestrap/sveltestrap';
-	import { t } from "../i18n";
-
-
+	import { t } from '../i18n';
 
 	/**
 	 * @typedef FormValues
@@ -44,11 +42,11 @@
 		<div class="row">
 			<div class="col">
 				<FormGroup>
-					<b><Label for="url">{$t("page.field.version")}</Label></b>
+					<b><Label for="url">{$t('page.field.version')}</Label></b>
 					<Input
 						type="text"
 						id="release"
-						placeholder={$t("page.field.version.placeholder")}
+						placeholder={$t('page.field.version.placeholder')}
 						bind:value={formValues.version}
 					/>
 				</FormGroup>
@@ -57,13 +55,13 @@
 				<div class="row">
 					<div class="col">
 						<FormGroup>
-							<b><Label for="url">{$t("page.field.from")}</Label></b>
+							<b><Label for="url">{$t('page.field.from')}</Label></b>
 							<Input type="date" id="from" bind:value={formValues.from} />
 						</FormGroup>
 					</div>
 					<div class="col">
 						<FormGroup>
-							<b><Label for="url">{$t("page.field.to")}</Label></b>
+							<b><Label for="url">{$t('page.field.to')}</Label></b>
 							<Input type="date" id="to" bind:value={formValues.to} />
 						</FormGroup>
 					</div>
@@ -74,25 +72,30 @@
 		<div class="row">
 			<div class="col">
 				<FormGroup>
-					<b><Label for="url">{$t("page.field.description")}</Label></b>
+					<b><Label for="url">{$t('page.field.description')}</Label></b>
 					<Input
 						type="textarea"
 						id="body"
-						placeholder={$t("page.field.description.placeholder")}
+						placeholder={$t('page.field.description.placeholder')}
 						bind:value={formValues.description}
 					/>
 				</FormGroup>
 			</div>
 			<div class="col">
 				<FormGroup>
-					<b><Label for="url">{$t("page.field.author")}</Label></b>
-					<Input type="text" id="author" placeholder={$t("page.field.author.placeholder")} bind:value={formValues.author} />
+					<b><Label for="url">{$t('page.field.author')}</Label></b>
+					<Input
+						type="text"
+						id="author"
+						placeholder={$t('page.field.author.placeholder')}
+						bind:value={formValues.author}
+					/>
 				</FormGroup>
 			</div>
 		</div>
 		<div class="row mt-2">
 			<div class="col text-center">
-				<Button color="primary" on:click={onClick}>{$t("page.button.filter")}</Button>
+				<Button color="primary" on:click={onClick}>{$t('page.button.filter')}</Button>
 			</div>
 		</div>
 	</div>
