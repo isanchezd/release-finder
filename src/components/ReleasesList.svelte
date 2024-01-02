@@ -17,10 +17,10 @@
 	 * @property {string} created_at
 	 */
 
-	 /**
-	  * @typedef Pagination
-	  * @property {number} currentPage
-	  * @property {number} totalPages
+	/**
+	 * @typedef Pagination
+	 * @property {number} currentPage
+	 * @property {number} totalPages
 	 */
 
 	/**
@@ -29,12 +29,11 @@
 	 */
 	export let releases;
 
-
 	/**
 	 * @description Releases Collection
 	 * @type {number}
 	 */
-	const LIMIT_PER_PAGE = 10
+	const LIMIT_PER_PAGE = 10;
 
 	/**
 	 * @description Releases Collection
@@ -43,62 +42,60 @@
 	const PAGINATION_INITIAL_STATE = {
 		currentPage: 1,
 		totalPages: Math.round(releases.length / LIMIT_PER_PAGE)
-	}
+	};
 
 	/**
 	 * @description Releases Collection
 	 * @type {Release[]}
 	 */
-	let releasesFragment
-
+	let releasesFragment;
 
 	/**
 	 * @descrption Releases Collection
 	 * @type {Pagination}
 	 */
-	let pagination = {...PAGINATION_INITIAL_STATE}
-
+	let pagination = { ...PAGINATION_INITIAL_STATE };
 
 	/**
 	 * @description Svelte Reactive flow
-	*/
+	 */
 	$: {
-		const initialSlice = (pagination.currentPage * LIMIT_PER_PAGE) - LIMIT_PER_PAGE
-		const endSlice =  initialSlice + LIMIT_PER_PAGE
-		releasesFragment = releases.slice(initialSlice, endSlice)
+		const initialSlice = pagination.currentPage * LIMIT_PER_PAGE - LIMIT_PER_PAGE;
+		const endSlice = initialSlice + LIMIT_PER_PAGE;
+		releasesFragment = releases.slice(initialSlice, endSlice);
 	}
 
 	/**
 	 * @description Method to go first page
 	 */
 	const onClickFirstPage = () => {
-		pagination.currentPage = 1
-	}
+		pagination.currentPage = 1;
+	};
 
 	/**
 	 * @description Method to go to the previous page
 	 */
 	const onClickPreviousPage = () => {
 		if (pagination.currentPage > 1) {
-			pagination.currentPage -= 1
-		}  
-	}
+			pagination.currentPage -= 1;
+		}
+	};
 
 	/**
 	 * @description Method to go to the next page
 	 */
 	const onClickNextPage = () => {
 		if (pagination.currentPage < pagination.totalPages) {
-			pagination.currentPage += 1
+			pagination.currentPage += 1;
 		}
-	}
+	};
 
 	/**
 	 * @description Method to go to the last page
 	 */
 	const onClickLastPage = () => {
-		pagination.currentPage = pagination.totalPages
-	}
+		pagination.currentPage = pagination.totalPages;
+	};
 </script>
 
 <div>
@@ -116,7 +113,7 @@
 					<PaginationLink first href="#" on:click={onClickFirstPage} />
 				</PaginationItem>
 				<PaginationItem>
-					<PaginationLink previous href="#"on:click={onClickPreviousPage} />
+					<PaginationLink previous href="#" on:click={onClickPreviousPage} />
 				</PaginationItem>
 				<PaginationItem active>
 					<PaginationLink href="#">{pagination.currentPage}</PaginationLink>

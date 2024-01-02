@@ -29,7 +29,6 @@ npm install
 
 This command will install all the necessary packages to work with the repository.
 
-
 ## Development
 
 After installing all the project dependencies, to start the project, run the following command:
@@ -115,4 +114,3 @@ Distributed under the GPL3 License. See LICENSE.txt for more information.
 ## Contact
 
 - isanchezd -(Iván Sánchez Díaz)[mailto:sanchez.diaz.ivan@gmail.com]
-

@@ -103,36 +103,6 @@ describe('Main Page test suite', () => {
 		});
 	});
 
-	
-	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
-		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
-
-		render(Page__SvelteComponent_);
-
-		fireEvent.input(screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']), {
-			target: { value: SUCESS_GITHUB_URL }
-		});
-
-		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
-
-		waitFor(() => {
-			expect(screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })).toBeInTheDocument();
-
-			fireEvent.click(screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' }));
-
-			fireEvent.input(screen.getByPlaceholderText(translations.en['page.field.version.placeholder']), {
-				target: { value: RELEASE.name }
-			});
-
-			expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
-		});
-
-		waitFor(() => {
-			expect(screen.queryByText(RELEASE.name)).toBeInTheDocument();
-		});
-	});
-
-	
 	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
@@ -148,9 +118,51 @@ describe('Main Page test suite', () => {
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
 		waitFor(() => {
-			expect(screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })).toBeInTheDocument();
+			expect(
+				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			).toBeInTheDocument();
 
-			fireEvent.click(screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' }));
+			fireEvent.click(
+				screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			);
+
+			fireEvent.input(
+				screen.getByPlaceholderText(translations.en['page.field.version.placeholder']),
+				{
+					target: { value: RELEASE.name }
+				}
+			);
+
+			expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
+		});
+
+		waitFor(() => {
+			expect(screen.queryByText(RELEASE.name)).toBeInTheDocument();
+		});
+	});
+
+	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
+		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
+
+		render(Page__SvelteComponent_);
+
+		fireEvent.input(
+			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
+			{
+				target: { value: SUCESS_GITHUB_URL }
+			}
+		);
+
+		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
+
+		waitFor(() => {
+			expect(
+				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			).toBeInTheDocument();
+
+			fireEvent.click(
+				screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			);
 
 			fireEvent.input(
 				screen.getByPlaceholderText(translations.en['page.field.version.placeholder']),
@@ -181,34 +193,49 @@ describe('Main Page test suite', () => {
 		});
 	});
 
-
 	test('When the user puts in filters form and the values don´t match, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
 		render(Page__SvelteComponent_);
 
-		fireEvent.input(screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']), {
-			target: { value: SUCESS_GITHUB_URL }
-		});
+		fireEvent.input(
+			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
+			{
+				target: { value: SUCESS_GITHUB_URL }
+			}
+		);
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
 		waitFor(() => {
-			expect(screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })).toBeInTheDocument();
+			expect(
+				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			).toBeInTheDocument();
 
-			fireEvent.click(screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' }));
+			fireEvent.click(
+				screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			);
 
-			fireEvent.input(screen.getByPlaceholderText(translations.en['page.field.version.placeholder']), {
-				target: { value: RELEASE.name }
-			});
+			fireEvent.input(
+				screen.getByPlaceholderText(translations.en['page.field.version.placeholder']),
+				{
+					target: { value: RELEASE.name }
+				}
+			);
 
-			fireEvent.input(screen.getByPlaceholderText(translations.en['page.field.description.placeholder']), {
-				target: { value: 'Fixed a duplicated' }
-			});
+			fireEvent.input(
+				screen.getByPlaceholderText(translations.en['page.field.description.placeholder']),
+				{
+					target: { value: 'Fixed a duplicated' }
+				}
+			);
 
-			fireEvent.input(screen.getByPlaceholderText(translations.en['page.field.author.placeholder']), {
-				target: { value: 'pepe' }
-			});
+			fireEvent.input(
+				screen.getByPlaceholderText(translations.en['page.field.author.placeholder']),
+				{
+					target: { value: 'pepe' }
+				}
+			);
 
 			expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 		});
