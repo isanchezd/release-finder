@@ -2,9 +2,11 @@
 	import { Spinner, Styles } from '@sveltestrap/sveltestrap';
 	import SearchRepo from '../components/SearchRepo.svelte';
 	import ReleasesList from '../components/ReleasesList.svelte';
+	import FilterForm from '../components/FilterForm.svelte';
 	import { isValidUrl, splitUrl, isDateBetweenInterval } from '../helpers';
 	import { getReleases } from '../repository';
-	import FilterForm from '../components/FilterForm.svelte';
+	import { t } from "../i18n";
+
 
 	/**
 	 * @typedef Author
@@ -149,8 +151,8 @@
 <Styles />
 
 <main class="d-flex flex-column min-vh-100">
-	<header class="border-bottom">
-		<h1>Release Finder</h1>
+	<header class="border-bottom p-2">
+		<h1>{$t("page.title")}</h1>
 	</header>
 	<br />
 	<section class="flex-grow-1">
@@ -173,12 +175,12 @@
 				{:else if releases.length > 0}
 					<ReleasesList {releases} />
 				{:else}
-					<p>No hay releases con esos criterios</p>
+					<p>{$t("page.no-results")}</p>
 				{/if}
 			{/if}
 		</div>
 	</section>
 	<footer class="border-top">
-		<p class="text-center">By Iván Sánchez Díaz</p>
+		<p class="text-center"><a class="link-offset-2 link-underline link-underline-opacity-0" href="mailto:sanchez.diaz.ivan@gmail.com">{$t("page.contact")}</a></p>
 	</footer>
 </main>

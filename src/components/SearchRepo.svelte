@@ -1,6 +1,8 @@
 <script>
 	import { Form, FormGroup, Input, Label } from '@sveltestrap/sveltestrap';
 	import { isValidUrl } from '../helpers';
+	import { t } from "../i18n";
+
 
 	/**
 	 * @description onInput method
@@ -24,13 +26,13 @@
 
 <Form>
 	<FormGroup>
-		<b><Label for="url">Url del repositorio</Label></b>
+		<b><Label for="url">{$t("page.field.repository-url")}</Label></b>
 		<Input
 			type="text"
 			id="url"
 			invalid={isInputInvalid(url)}
-			feedback="I could be wrong"
-			placeholder="Repository url"
+			feedback={$t("page.field.repository-url.error")}
+			placeholder={$t("page.field.repository-url.placeholder")}
 			on:input={onInput}
 			bind:value={url}
 		/>
