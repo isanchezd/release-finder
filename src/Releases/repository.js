@@ -13,8 +13,16 @@ const getReleases = async (owner, repo) => {
 		per_page: 99
 	};
 
-	const response = await octokit.request(PATH, options);
-	const { data } = response;
+	let data = null;
+	let response = null;
+
+	try {
+		response = await octokit.request(PATH, options);
+	} catch (error) {
+		console.error(error)
+	}
+
+	data = response?.data;
 
 	return data;
 };

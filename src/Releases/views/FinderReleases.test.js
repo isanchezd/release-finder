@@ -1,24 +1,24 @@
 import { describe, test, vi, expect } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
-import Page__SvelteComponent_ from './+page.svelte';
+import FinderReleases from './FinderReleases.svelte';
 import { getReleases } from '../repository';
-import translations from '../i18n/translations';
+import translations from '../../i18n/translations';
 import { API_RESPONSE, GITHUB_URL_WITHOUT_RELEASES, RELEASE, SUCESS_GITHUB_URL } from './__mocks__';
 
-describe('Main Page test suite', () => {
+describe('Finder Releases View test suite', () => {
 	vi.mock('../repository');
 
 	test('The component not should to show the form filter and not show the releases list', () => {
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		expect(
 			screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
 		).toBeNull();
-		expect(screen.queryByText('/loading.../i')).toBeNull();
+		expect(screen.queryByRole('progressbar')).toBeNull();
 	});
 
 	test('When the repository input is incorrect format (not url) the component not should to show the form filter and not show the releases list', () => {
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
@@ -26,28 +26,35 @@ describe('Main Page test suite', () => {
 				target: { value: 'aaa' }
 			}
 		);
+		fireEvent.click(screen.getByRole('search'));
 
 		expect(getReleases).not.toHaveBeenCalled();
-		expect(
-			screen.queryByText(translations.en['page.field.repository-url.error'])
-		).toBeInTheDocument();
+
+		waitFor(() => {
+			expect(
+				screen.queryByText(translations.en['page.field.repository-url.error'])
+			).toBeInTheDocument();
+		});
 	});
 
 	test('When the repository input has a incorrect url (not githubs url) the component not should to show the form filter and not show the releases list', () => {
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
 			{
 				target: { value: 'https://www.google.es/1/2' }
 			}
-		);
+		)
+		fireEvent.click(
+			screen.getByRole('search')
+		)
 
 		expect(getReleases).not.toHaveBeenCalled();
 		expect(
 			screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
 		).toBeNull();
-		expect(screen.queryByText('/loading.../i')).toBeNull();
+		expect(screen.queryByRole('progressbar')).toBeNull();
 	});
 
 	test('When the repository input has a correct github url, the form filter and a releases list should be in the document', () => {
@@ -55,7 +62,7 @@ describe('Main Page test suite', () => {
 
 		const release = API_RESPONSE.find((release) => release.id === RELEASE.id);
 
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
@@ -63,6 +70,9 @@ describe('Main Page test suite', () => {
 				target: { value: SUCESS_GITHUB_URL }
 			}
 		);
+		fireEvent.click(
+			screen.getByRole('search')
+		)
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
@@ -81,7 +91,7 @@ describe('Main Page test suite', () => {
 	test('When the repository input has a correct github url but the repo hasn´t releases, the form filter should be in the document but the releases list not to be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue([]);
 
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
@@ -89,6 +99,9 @@ describe('Main Page test suite', () => {
 				target: { value: GITHUB_URL_WITHOUT_RELEASES }
 			}
 		);
+		fireEvent.click(
+			screen.getByRole('search')
+		)
 
 		expect(getReleases).toHaveBeenCalledWith('kilimchoi', 'engineering-blogs');
 
@@ -106,7 +119,7 @@ describe('Main Page test suite', () => {
 	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
@@ -114,6 +127,9 @@ describe('Main Page test suite', () => {
 				target: { value: SUCESS_GITHUB_URL }
 			}
 		);
+		fireEvent.click(
+			screen.getByRole('search')
+		)
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
@@ -144,7 +160,7 @@ describe('Main Page test suite', () => {
 	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
@@ -152,6 +168,9 @@ describe('Main Page test suite', () => {
 				target: { value: SUCESS_GITHUB_URL }
 			}
 		);
+		fireEvent.click(
+			screen.getByRole('search')
+		)
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
@@ -196,7 +215,7 @@ describe('Main Page test suite', () => {
 	test('When the user puts in filters form and the values don´t match, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
-		render(Page__SvelteComponent_);
+		render(FinderReleases);
 
 		fireEvent.input(
 			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
@@ -204,6 +223,9 @@ describe('Main Page test suite', () => {
 				target: { value: SUCESS_GITHUB_URL }
 			}
 		);
+		fireEvent.click(
+			screen.getByRole('search')
+		)
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 

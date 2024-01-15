@@ -8,7 +8,7 @@
 		CardTitle
 	} from '@sveltestrap/sveltestrap';
 	import SvelteMarkdown from 'svelte-markdown';
-	import { t } from '../i18n';
+	import { t } from '../../i18n';
 
 	/**
 	 * @typedef Author
@@ -32,10 +32,19 @@
 	export let release;
 </script>
 
+<style>
+	.card-header-wrapper {
+		background-color: var(--bs-primary);
+		color: var(--bs-light);
+	}
+</style>
+
 <Card>
-	<CardHeader>
-		<CardTitle>{release.name}</CardTitle>
-	</CardHeader>
+	<div class="card-header-wrapper">
+		<CardHeader>
+			<CardTitle>{release.name}</CardTitle>
+		</CardHeader>
+	</div>
 	<CardBody>
 		<CardText>
 			<SvelteMarkdown source={release.body} />
@@ -55,3 +64,6 @@
 		</div></CardFooter
 	>
 </Card>
+
+
+
