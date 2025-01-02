@@ -11,22 +11,25 @@
 	 * @property {string} author
 	 */
 
+	
 	/**
-	 * @type { (formValues: FormValues) => Promise<void> }
-	 * @param {FormValues} formValues
+	 * @typedef {Object} Props
+	 * @property { (formValues: FormValues) => Promise<void> } onSubmit
 	 */
-	export let onSubmit;
+
+	/** @type {Props} */
+	let { onSubmit } = $props();
 
 	/**
 	 * @type FormValues
 	 */
-	let formValues = {
+	let formValues = $state({
 		version: '',
 		from: '',
 		to: '',
 		description: '',
 		author: ''
-	};
+	});
 
 	/**
 	 *
@@ -99,7 +102,7 @@
 			</div>
 			<div class="row mt-2 text-center">
 				<div class="col">
-					<Button color="primary" on:click={onClick}>{$t('page.button.filter')}</Button>
+					<Button color="primary" onclick={onClick}>{$t('page.button.filter')}</Button>
 				</div>
 			</div>
 		</div>

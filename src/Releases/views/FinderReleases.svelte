@@ -1,15 +1,14 @@
 <script>
-    import SearchRepo from '../components/SearchRepo.svelte';
+	import SearchRepo from '../components/SearchRepo.svelte';
 	import Releases from '../components/Releases.svelte';
 	import FilterForm from '../components/FilterForm.svelte';
 	import Spinner from '../components/Spinner.svelte';
 
-    import { splitUrl } from '../helpers';
-	import { isValidUrl,  isDateBetweenInterval } from '../validators';
+	import { splitUrl } from '../helpers';
+	import { isValidUrl, isDateBetweenInterval } from '../validators';
 	import { getReleases } from '../repository';
 
-
-    import { t } from '../../i18n';
+	import { t } from '../../i18n';
 
 	/**
 	 * @typedef Author
@@ -52,19 +51,19 @@
 	 *
 	 * @type boolean
 	 */
-	let isLoading = true;
+	let isLoading = $state(true);
 
 	/**
 	 *
 	 * @type boolean
 	 */
-	let showReleases = false;
+	let showReleases = $state(false);
 
 	/**
 	 *
 	 * @type { Release[] }
 	 */
-	let releases = [];
+	let releases = $state([]);
 
 	/**
 	 * @description On Input event
@@ -88,7 +87,7 @@
 	 */
 
 	const fetchReleases = async (owner, repo) => {
-		isLoading = true
+		isLoading = true;
 		try {
 			releases = await getReleases(owner, repo);
 		} catch (err) {
@@ -145,30 +144,28 @@
 	};
 </script>
 
-
-
 <section class="flex-grow-1">
-		<div class="container">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+				<SearchRepo {onClick} />
+			</div>
+		</div>
+
+		{#if showReleases}
 			<div class="row">
-				<div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
-					<SearchRepo {onClick} />
+				<div class="col mt-2">
+					<FilterForm {onSubmit} />
 				</div>
 			</div>
 
-			{#if showReleases}
-				<div class="row">
-					<div class="col mt-2">
-						<FilterForm {onSubmit} />
-					</div>
-				</div>
-
-				{#if isLoading}
-					<Spinner />
-				{:else if releases.length > 0}
-					<Releases {releases} />
-				{:else}
-					<p>{$t('page.no-results')}</p>
-				{/if}
+			{#if isLoading}
+				<Spinner />
+			{:else if releases.length > 0}
+				<Releases {releases} />
+			{:else}
+				<p>{$t('page.no-results')}</p>
 			{/if}
-		</div>
-	</section>
+		{/if}
+	</div>
+</section>

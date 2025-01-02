@@ -1,4 +1,6 @@
 <script>
+	import { run } from 'svelte/legacy';
+
 	import Release from './Release.svelte';
 	import { Pagination, PaginationItem, PaginationLink } from '@sveltestrap/sveltestrap';
 
@@ -23,11 +25,14 @@
 	 * @property {number} totalPages
 	 */
 
+	
 	/**
-	 * @description Releases Collection
-	 * @type {Release[]}
+	 * @typedef {Object} Props
+	 * @property {Release[]} releases
 	 */
-	export let releases;
+
+	/** @type {Props} */
+	let { releases } = $props();
 
 	/**
 	 * @description Releases Collection
@@ -48,18 +53,18 @@
 	 * @description Releases Collection
 	 * @type {Release[]}
 	 */
-	let releasesFragment;
+	let releasesFragment = $state([]);
 
 	/**
 	 * @descrption Releases Collection
 	 * @type {Pagination}
 	 */
-	let pagination = { ...PAGINATION_INITIAL_STATE };
+	let pagination = $state({ ...PAGINATION_INITIAL_STATE });
 
 	/**
 	 * @description Svelte Reactive flow
 	 */
-	$: {
+	$effect: {
 		const initialSlice = pagination.currentPage * LIMIT_PER_PAGE - LIMIT_PER_PAGE;
 		const endSlice = initialSlice + LIMIT_PER_PAGE;
 		releasesFragment = releases.slice(initialSlice, endSlice);

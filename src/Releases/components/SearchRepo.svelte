@@ -3,16 +3,19 @@
 	import { isValidUrl } from '../validators';
 	import { t } from '../../i18n';
 
+	
 	/**
-	 * @description onClick method
-	 * @type { (url: string) => void }
+	 * @typedef {Object} Props
+	 * @property { (url: string) => void } onClick
 	 */
-	export let onClick;
+
+	/** @type {Props} */
+	let { onClick } = $props();
 
 	/**
 	 * @type string
 	 */
-	let url = '';
+	let url = $state('');
 
 	/**
 	 * @description Input Field validation f
@@ -34,7 +37,7 @@
 			placeholder={$t('page.field.repository-url.placeholder')}
 			bind:value={url}
 		/>
-		<Button color="primary" on:click={() => onClick(url)} role="search"><Icon name="search" /></Button>
+		<Button color="primary" onclick={() => onClick(url)} role="search"><Icon name="search" /></Button>
 	</div>
 	<div class="row">
 		<span class="text-danger">{isInputInvalid(url) ? $t('page.field.repository-url.error') : ''}</span>

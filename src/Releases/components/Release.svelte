@@ -25,11 +25,14 @@
 	 * @property {string} created_at
 	 */
 
+	
 	/**
-	 * Release entiy
-	 * @type {Release}
+	 * @typedef {Object} Props
+	 * @property {Release} release - Release entiy
 	 */
-	export let release;
+
+	/** @type {Props} */
+	let { release } = $props();
 </script>
 
 <style>

@@ -1,5 +1,5 @@
 import { describe, test, vi, expect } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/svelte';
+import { render, screen, fireEvent, waitFor } from '@testing-library/svelte/svelte5';
 import FinderReleases from './FinderReleases.svelte';
 import { getReleases } from '../repository';
 import translations from '../../i18n/translations';
