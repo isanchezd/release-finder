@@ -1,7 +1,7 @@
 <script>
 	import { Form, FormGroup, Input, Label, Button, Icon } from '@sveltestrap/sveltestrap';
 	import { isValidUrl } from '../validators';
-	import { t } from '../../i18n';
+	import { t } from '../../../i18n';
 
 	
 	/**

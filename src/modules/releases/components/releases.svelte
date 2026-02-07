@@ -1,7 +1,5 @@
 <script>
-	import { run } from 'svelte/legacy';
-
-	import Release from './Release.svelte';
+	import Release from './release.svelte';
 	import { Pagination, PaginationItem, PaginationLink } from '@sveltestrap/sveltestrap';
 
 	/**
@@ -41,48 +39,49 @@
 	const LIMIT_PER_PAGE = 10;
 
 	/**
-	 * @description Releases Collection
-	 * @type {Pagination}
+	 * @description Current page state
+	 * @type {number}
 	 */
-	const PAGINATION_INITIAL_STATE = {
-		currentPage: 1,
-		totalPages: Math.round(releases.length / LIMIT_PER_PAGE)
-	};
+	let currentPage = $state(1);
 
 	/**
-	 * @description Releases Collection
+	 * @description Total pages calculated reactively from releases length
+	 * @type {number}
+	 */
+	const totalPages = $derived(Math.ceil(releases.length / LIMIT_PER_PAGE));
+
+	/**
+	 * @description Releases fragment calculated reactively for current page
 	 * @type {Release[]}
 	 */
-	let releasesFragment = $state([]);
+	const releasesFragment = $derived.by(() => {
+		const initialSlice = currentPage * LIMIT_PER_PAGE - LIMIT_PER_PAGE;
+		const endSlice = initialSlice + LIMIT_PER_PAGE;
+		return releases.slice(initialSlice, endSlice);
+	});
 
 	/**
-	 * @descrption Releases Collection
+	 * @descrption Pagination object for easier access
 	 * @type {Pagination}
 	 */
-	let pagination = $state({ ...PAGINATION_INITIAL_STATE });
-
-	/**
-	 * @description Svelte Reactive flow
-	 */
-	$effect: {
-		const initialSlice = pagination.currentPage * LIMIT_PER_PAGE - LIMIT_PER_PAGE;
-		const endSlice = initialSlice + LIMIT_PER_PAGE;
-		releasesFragment = releases.slice(initialSlice, endSlice);
-	}
+	const pagination = $derived({
+		currentPage,
+		totalPages
+	});
 
 	/**
 	 * @description Method to go first page
 	 */
 	const onClickFirstPage = () => {
-		pagination.currentPage = 1;
+		currentPage = 1;
 	};
 
 	/**
 	 * @description Method to go to the previous page
 	 */
 	const onClickPreviousPage = () => {
-		if (pagination.currentPage > 1) {
-			pagination.currentPage -= 1;
+		if (currentPage > 1) {
+			currentPage -= 1;
 		}
 	};
 
@@ -90,8 +89,8 @@
 	 * @description Method to go to the next page
 	 */
 	const onClickNextPage = () => {
-		if (pagination.currentPage < pagination.totalPages) {
-			pagination.currentPage += 1;
+		if (currentPage < totalPages) {
+			currentPage += 1;
 		}
 	};
 
@@ -99,7 +98,7 @@
 	 * @description Method to go to the last page
 	 */
 	const onClickLastPage = () => {
-		pagination.currentPage = pagination.totalPages;
+		currentPage = totalPages;
 	};
 </script>
 

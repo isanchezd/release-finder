@@ -1,9 +1,9 @@
 <script>
 	import { Styles } from '@sveltestrap/sveltestrap';
 	
-	import Header from '../Common/components/Header.svelte';
-	import Releases from '../Releases/views/FinderReleases.svelte';
-	import Footer from '../Common/components/Footer.svelte';
+	import Header from '../components/Header.svelte';
+	import Releases from '../modules/releases/views/finder-releases.svelte';
+	import Footer from '../components/footer.svelte';
 
 	
 </script>

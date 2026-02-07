@@ -1,14 +1,14 @@
 <script>
-	import SearchRepo from '../components/SearchRepo.svelte';
-	import Releases from '../components/Releases.svelte';
-	import FilterForm from '../components/FilterForm.svelte';
-	import Spinner from '../components/Spinner.svelte';
+	import SearchRepo from '../components/search-repo.svelte';
+	import Releases from '../components/releases.svelte';
+	import FilterForm from '../components/filter-form.svelte';
+	import Spinner from '../components/spinner.svelte';
 
-	import { splitUrl } from '../helpers';
+	import { splitUrl } from '../../../utils/url';
 	import { isValidUrl, isDateBetweenInterval } from '../validators';
 	import { getReleases } from '../repository';
 
-	import { t } from '../../i18n';
+	import { t } from '../../../i18n';
 
 	/**
 	 * @typedef Author

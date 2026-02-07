@@ -1,14 +1,15 @@
 import { describe, test, vi, expect } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/svelte/svelte5';
-import FinderReleases from './FinderReleases.svelte';
+import FinderReleases from './finder-releases.svelte';
 import { getReleases } from '../repository';
-import translations from '../../i18n/translations';
+import translations from '../../../i18n/translations';
 import { API_RESPONSE, GITHUB_URL_WITHOUT_RELEASES, RELEASE, SUCESS_GITHUB_URL } from './__mocks__';
 
 describe('Finder Releases View test suite', () => {
 	vi.mock('../repository');
 
 	test('The component not should to show the form filter and not show the releases list', () => {
+		// @ts-ignore
 		render(FinderReleases);
 
 		expect(
@@ -18,6 +19,7 @@ describe('Finder Releases View test suite', () => {
 	});
 
 	test('When the repository input is incorrect format (not url) the component not should to show the form filter and not show the releases list', () => {
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(
@@ -38,6 +40,7 @@ describe('Finder Releases View test suite', () => {
 	});
 
 	test('When the repository input has a incorrect url (not githubs url) the component not should to show the form filter and not show the releases list', () => {
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(
@@ -62,6 +65,7 @@ describe('Finder Releases View test suite', () => {
 
 		const release = API_RESPONSE.find((release) => release.id === RELEASE.id);
 
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(
@@ -91,6 +95,7 @@ describe('Finder Releases View test suite', () => {
 	test('When the repository input has a correct github url but the repo hasn´t releases, the form filter should be in the document but the releases list not to be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue([]);
 
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(
@@ -119,6 +124,7 @@ describe('Finder Releases View test suite', () => {
 	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(
@@ -160,6 +166,7 @@ describe('Finder Releases View test suite', () => {
 	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(
@@ -215,6 +222,7 @@ describe('Finder Releases View test suite', () => {
 	test('When the user puts in filters form and the values don´t match, the releases should be in the document', () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
+		// @ts-ignore
 		render(FinderReleases);
 
 		fireEvent.input(

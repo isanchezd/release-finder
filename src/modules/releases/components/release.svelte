@@ -8,7 +8,7 @@
 		CardTitle
 	} from '@sveltestrap/sveltestrap';
 	import SvelteMarkdown from 'svelte-markdown';
-	import { t } from '../../i18n';
+	import { t } from '../../../i18n';
 
 	/**
 	 * @typedef Author

@@ -1,5 +1,5 @@
 <script>
-	import { t } from '../../i18n';
+	import { t } from '../i18n';
 </script>
 
 <footer class="border-top">

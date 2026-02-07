@@ -1,6 +1,6 @@
 <script>
 	import { Form, FormGroup, Input, Label, Button } from '@sveltestrap/sveltestrap';
-	import { t } from '../../i18n';
+	import { t } from '../../../i18n';
 
 	/**
 	 * @typedef FormValues
