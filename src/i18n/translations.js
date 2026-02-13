@@ -14,7 +14,9 @@ export default {
 		'page.field.description.placeholder': 'Piece of body',
 		'page.field.author': 'Author',
 		'page.field.author.placeholder': 'Author',
+		'page.button.search': 'Search',
 		'page.button.filter': 'Filter',
-		'page.created-by': 'Created by'
+		'page.button.clear': 'Clear',
+		'page.created-by': 'Created by',
 	}
 };

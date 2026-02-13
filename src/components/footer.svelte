@@ -1,12 +1,5 @@
-<script>
-	import { t } from '../i18n';
-</script>
-
-<footer class="border-top">
-	<p class="text-center">
-		<a
-			class="link-offset-2 link-underline link-underline-opacity-0"
-			href="mailto:sanchez.diaz.ivan@gmail.com">{$t('page.contact')}</a
-		>
-	</p>
+<footer class="p-4 border-top  mt-auto">
+	<div class="container">
+		<p class="text-center small text-muted mb-0">Built for developers • Powered by GitHub API</p>
+	</div>
 </footer>

@@ -14,6 +14,7 @@
 	 * @typedef Author
 	 * @property {string} login
 	 * @property { string } html_url
+	 * @property { string } avatar_url
 	 */
 
 	/**
@@ -24,6 +25,7 @@
 	 * @property {string} string
 	 * @property {Author} author
 	 * @property {string} created_at
+	 * @property {string} html_url
 	 */
 
 	/**
@@ -78,6 +80,16 @@
 		repo = urlSplitted[2];
 		showReleases = true;
 		fetchReleases(owner, repo);
+	};
+
+	/**
+	 * @description Reset search and releases state
+	 */
+	const onClear = () => {
+		owner = '';
+		repo = '';
+		releases = [];
+		showReleases = false;
 	};
 
 	/**
@@ -145,27 +157,57 @@
 </script>
 
 <section class="flex-grow-1">
-	<div class="container">
-		<div class="row">
-			<div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
-				<SearchRepo {onClick} />
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-10 col-xl-8">
+				<!-- Header Section -->
+				<div class="text-center mb-5">
+					<div class="d-flex align-items-center justify-content-center gap-3 mb-4">
+						<h1 class="display-4 fw-semibold">Release Finder</h1>
+					</div>
+					<p class="lead text-muted mx-auto" style="max-width: 42rem;">
+						Discover and track GitHub releases effortlessly. Enter any repository URL to explore its
+						release history and stay updated with the latest versions.
+					</p>
+				</div>
+
+				<!-- Search Section -->
+				<div class="card shadow-sm border mb-4">
+					<div class="card-body p-4">
+						<SearchRepo {onClick} {onClear} />
+					</div>
+				</div>
+
+				{#if showReleases}
+					<!-- Filter Section -->
+					<div class="card shadow-sm border mb-4">
+						<div class="card-body p-4">
+							<FilterForm {onSubmit} />
+						</div>
+					</div>
+
+					<!-- Loading State -->
+					{#if isLoading}
+						<Spinner />
+					{:else if releases.length > 0}
+						<!-- Releases List -->
+						<div class="mb-4">
+							<h2 class="h5 fw-semibold mb-4 d-flex align-items-center gap-2">
+								<span>Releases ({releases.length})</span>
+							</h2>
+							<Releases {releases} />
+						</div>
+					{:else}
+						<!-- No Results -->
+						<div class="card border bg-light">
+							<div class="card-body p-5 text-center">
+								<h3 class="h6 fw-semibold mb-2">{$t('page.no-results')}</h3>
+								<p class="small text-muted mb-0">Try adjusting your search criteria.</p>
+							</div>
+						</div>
+					{/if}
+				{/if}
 			</div>
 		</div>
-
-		{#if showReleases}
-			<div class="row">
-				<div class="col mt-2">
-					<FilterForm {onSubmit} />
-				</div>
-			</div>
-
-			{#if isLoading}
-				<Spinner />
-			{:else if releases.length > 0}
-				<Releases {releases} />
-			{:else}
-				<p>{$t('page.no-results')}</p>
-			{/if}
-		{/if}
 	</div>
 </section>

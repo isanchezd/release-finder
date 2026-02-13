@@ -5,7 +5,8 @@
 	/**
 	 * @typedef Author
 	 * @property {string} login
-	 * @property { string } html_url
+	 * @property {string} html_url
+	 * @property {string} avatar_url
 	 */
 
 	/**
@@ -15,6 +16,7 @@
 	 * @property {string} body
 	 * @property {Author} author
 	 * @property {string} created_at
+	 * @property {string} html_url
 	 */
 
 	/**
@@ -103,32 +105,29 @@
 </script>
 
 <div>
-	{#each releasesFragment as release}
-		<div class="row mb-4 mt-4">
-			<div class="col">
-				<Release {release} />
-			</div>
-		</div>
+	{#each releasesFragment as release, index}
+		<Release release={{ ...release, isLatest: releases.indexOf(release) === 0 }} />
 	{/each}
-	<div class="row">
-		<div class="d-flex justify-content-center">
+	
+	{#if totalPages > 1}
+		<div class="d-flex justify-content-center mt-4">
 			<Pagination size="sm">
-				<PaginationItem>
+				<PaginationItem disabled={currentPage === 1}>
 					<PaginationLink first href="#" on:click={onClickFirstPage} />
 				</PaginationItem>
-				<PaginationItem>
+				<PaginationItem disabled={currentPage === 1}>
 					<PaginationLink previous href="#" on:click={onClickPreviousPage} />
 				</PaginationItem>
 				<PaginationItem active>
 					<PaginationLink href="#">{pagination.currentPage}</PaginationLink>
 				</PaginationItem>
-				<PaginationItem>
+				<PaginationItem disabled={currentPage === totalPages}>
 					<PaginationLink next href="#" on:click={onClickNextPage} />
 				</PaginationItem>
-				<PaginationItem>
+				<PaginationItem disabled={currentPage === totalPages}>
 					<PaginationLink last href="#" on:click={onClickLastPage} />
 				</PaginationItem>
 			</Pagination>
 		</div>
-	</div>
+	{/if}
 </div>
