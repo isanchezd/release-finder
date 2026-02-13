@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import SearchRepo from '../components/search-repo.svelte';
 	import Releases from '../components/releases.svelte';
 	import FilterForm from '../components/filter-form.svelte';
 	import Spinner from '../components/spinner.svelte';
+	import type { FormValues, Release } from '../types';
 
 	import { splitUrl } from '../../../utils/url';
 	import { isValidUrl, isDateBetweenInterval } from '../validators';
@@ -10,68 +11,16 @@
 
 	import { t } from '../../../i18n';
 
-	/**
-	 * @typedef Author
-	 * @property {string} login
-	 * @property { string } html_url
-	 * @property { string } avatar_url
-	 */
+	let owner = $state('');
+	let repo = $state('');
 
-	/**
-	 * @typedef Release
-	 * @property {number} id
-	 * @property {string} name
-	 * @property {string} body
-	 * @property {string} string
-	 * @property {Author} author
-	 * @property {string} created_at
-	 * @property {string} html_url
-	 */
-
-	/**
-	 * @typedef FormValues
-	 * @property {string} version
-	 * @property {string} from
-	 * @property {string} to
-	 * @property {string} description
-	 * @property {string} author
-	 */
-
-	/**
-	 *
-	 * @type string
-	 */
-	let owner;
-
-	/**
-	 *
-	 * @type string
-	 */
-	let repo;
-
-	/**
-	 *
-	 * @type boolean
-	 */
 	let isLoading = $state(true);
 
-	/**
-	 *
-	 * @type boolean
-	 */
 	let showReleases = $state(false);
 
-	/**
-	 *
-	 * @type { Release[] }
-	 */
-	let releases = $state([]);
+	let releases = $state<Release[]>([]);
 
-	/**
-	 * @description On Input event
-	 * @param {string} url
-	 */
-	const onClick = (url) => {
+	const onClick = (url: string): void => {
 		if (!isValidUrl(url)) {
 			return;
 		}
@@ -82,54 +31,31 @@
 		fetchReleases(owner, repo);
 	};
 
-	/**
-	 * @description Reset search and releases state
-	 */
-	const onClear = () => {
+	const onClear = (): void => {
 		owner = '';
 		repo = '';
 		releases = [];
 		showReleases = false;
 	};
 
-	/**
-	 * @description On Input event
-	 * @param {string} owner,
-	 * @param {string} repo
-	 */
-
-	const fetchReleases = async (owner, repo) => {
+	const fetchReleases = async (owner: string, repo: string): Promise<void> => {
 		isLoading = true;
 		try {
 			releases = await getReleases(owner, repo);
-		} catch (err) {
-			console.log(err);
+		} catch (error) {
+			console.error(error);
 		} finally {
 			isLoading = false;
 		}
 	};
 
-	/**
-	 * @description onSubmit function to handle the user´s click action on filter button
-	 * @param {FormValues} formValues
-	 */
-
-	const onSubmit = async (formValues) => {
+	const onSubmit = async (formValues: FormValues): Promise<void> => {
 		await fetchReleases(owner, repo);
 		const filteredReleases = releases.filter((release) => filterReleases(release, formValues));
 		releases = [...filteredReleases];
 	};
 
-	/**
-	 *
-	 * @param { Release } release
-	 * @param { FormValues } filter
-	 */
-
-	const filterReleases = (release, filter) => {
-		/**
-		 * @type {boolean[]}
-		 */
+	const filterReleases = (release: Release, filter: FormValues): boolean => {
 		const matchers = [];
 
 		if (filter.version) {
@@ -148,11 +74,7 @@
 			matchers.push(release.author.login.includes(filter.author));
 		}
 
-		const isMatch = matchers.every((matcher) => matcher === true);
-
-		if (isMatch) {
-			return release;
-		}
+		return matchers.every((matcher) => matcher === true);
 	};
 </script>
 

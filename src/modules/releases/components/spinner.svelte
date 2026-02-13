@@ -1,3 +1,7 @@
+<script lang="ts">
+	export {};
+</script>
+
 <style>
     .custom-spinner {
         width: 4rem;

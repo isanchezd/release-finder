@@ -1,28 +1,15 @@
-<script>
+<script lang="ts">
 	import { Input, Label, Button, Icon } from '@sveltestrap/sveltestrap';
 	import { t } from '../../../i18n';
+	import type { FormValues } from '../types';
 
-	/**
-	 * @typedef FormValues
-	 * @property {string} version
-	 * @property {string} from
-	 * @property {string} to
-	 * @property {string} description
-	 * @property {string} author
-	 */
+	type Props = {
+		onSubmit: (formValues: FormValues) => Promise<void> | void;
+	};
 
-	/**
-	 * @typedef {Object} Props
-	 * @property { (formValues: FormValues) => Promise<void> } onSubmit
-	 */
+	let { onSubmit }: Props = $props();
 
-	/** @type {Props} */
-	let { onSubmit } = $props();
-
-	/**
-	 * @type FormValues
-	 */
-	let formValues = $state({
+	let formValues = $state<FormValues>({
 		version: '',
 		from: '',
 		to: '',
@@ -30,15 +17,9 @@
 		author: ''
 	});
 
-	/**
-	 * @type boolean
-	 */
 	let showFilters = $state(true);
 
-	/**
-	 * @description Clear all filters
-	 */
-	const clearFilters = () => {
+	const clearFilters = (): void => {
 		formValues = {
 			version: '',
 			from: '',
@@ -48,21 +29,14 @@
 		};
 	};
 
-	/**
-	 * @description Handle filter submit
-	 */
-	const handleSubmitClick = () => {
+	const handleSubmitClick = (): void => {
 		onSubmit(formValues);
 	};
 
-	/**
-	 * @description Handle filter submit
-	 */
-	const handleClearClick = () => {
+	const handleClearClick = (): void => {
 		clearFilters();
 		onSubmit(formValues);
 	};
-
 </script>
 
 <div>

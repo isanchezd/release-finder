@@ -1,111 +1,49 @@
-<script>
+<script lang="ts">
 	import Release from './release.svelte';
 	import { Pagination, PaginationItem, PaginationLink } from '@sveltestrap/sveltestrap';
+	import type { Release as ReleaseType } from '../types';
 
-	/**
-	 * @typedef Author
-	 * @property {string} login
-	 * @property {string} html_url
-	 * @property {string} avatar_url
-	 */
+	type Props = {
+		releases: ReleaseType[];
+	};
 
-	/**
-	 * @typedef Release
-	 * @property {number} id
-	 * @property {string} name
-	 * @property {string} body
-	 * @property {Author} author
-	 * @property {string} created_at
-	 * @property {string} html_url
-	 */
+	let { releases }: Props = $props();
 
-	/**
-	 * @typedef Pagination
-	 * @property {number} currentPage
-	 * @property {number} totalPages
-	 */
-
-	
-	/**
-	 * @typedef {Object} Props
-	 * @property {Release[]} releases
-	 */
-
-	/** @type {Props} */
-	let { releases } = $props();
-
-	/**
-	 * @description Releases Collection
-	 * @type {number}
-	 */
 	const LIMIT_PER_PAGE = 10;
 
-	/**
-	 * @description Current page state
-	 * @type {number}
-	 */
 	let currentPage = $state(1);
 
-	/**
-	 * @description Total pages calculated reactively from releases length
-	 * @type {number}
-	 */
 	const totalPages = $derived(Math.ceil(releases.length / LIMIT_PER_PAGE));
 
-	/**
-	 * @description Releases fragment calculated reactively for current page
-	 * @type {Release[]}
-	 */
 	const releasesFragment = $derived.by(() => {
 		const initialSlice = currentPage * LIMIT_PER_PAGE - LIMIT_PER_PAGE;
 		const endSlice = initialSlice + LIMIT_PER_PAGE;
 		return releases.slice(initialSlice, endSlice);
 	});
 
-	/**
-	 * @descrption Pagination object for easier access
-	 * @type {Pagination}
-	 */
-	const pagination = $derived({
-		currentPage,
-		totalPages
-	});
-
-	/**
-	 * @description Method to go first page
-	 */
-	const onClickFirstPage = () => {
+	const onClickFirstPage = (): void => {
 		currentPage = 1;
 	};
 
-	/**
-	 * @description Method to go to the previous page
-	 */
-	const onClickPreviousPage = () => {
+	const onClickPreviousPage = (): void => {
 		if (currentPage > 1) {
 			currentPage -= 1;
 		}
 	};
 
-	/**
-	 * @description Method to go to the next page
-	 */
-	const onClickNextPage = () => {
+	const onClickNextPage = (): void => {
 		if (currentPage < totalPages) {
 			currentPage += 1;
 		}
 	};
 
-	/**
-	 * @description Method to go to the last page
-	 */
-	const onClickLastPage = () => {
+	const onClickLastPage = (): void => {
 		currentPage = totalPages;
 	};
 </script>
 
 <div>
-	{#each releasesFragment as release, index}
+	{#each releasesFragment as release}
 		<Release release={{ ...release, isLatest: releases.indexOf(release) === 0 }} />
 	{/each}
 	
@@ -119,7 +57,7 @@
 					<PaginationLink previous href="#" on:click={onClickPreviousPage} />
 				</PaginationItem>
 				<PaginationItem active>
-					<PaginationLink href="#">{pagination.currentPage}</PaginationLink>
+					<PaginationLink href="#">{currentPage}</PaginationLink>
 				</PaginationItem>
 				<PaginationItem disabled={currentPage === totalPages}>
 					<PaginationLink next href="#" on:click={onClickNextPage} />

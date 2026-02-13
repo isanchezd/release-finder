@@ -1,38 +1,15 @@
-<script>
+<script lang="ts">
 	import { Card, CardBody, CardHeader, CardTitle, Icon } from '@sveltestrap/sveltestrap';
 	import SvelteMarkdown from 'svelte-markdown';
+	import type { Release } from '../types';
 
-	/**
-	 * @typedef Author
-	 * @property {string} login
-	 * @property {string} html_url
-	 * @property {string} avatar_url
-	 */
+	type Props = {
+		release: Release;
+	};
 
-	/**
-	 * @typedef Release
-	 * @property {number} id
-	 * @property {string} name
-	 * @property {string} body
-	 * @property {Author} author
-	 * @property {string} created_at
-	 * @property {string} html_url
-	 * @property {boolean} [isLatest]
-	 */
+	let { release }: Props = $props();
 
-	/**
-	 * @typedef {Object} Props
-	 * @property {Release} release - Release entity
-	 */
-
-	/** @type {Props} */
-	let { release } = $props();
-
-	/**
-	 * @description Format date to readable format
-	 * @param {string} dateString
-	 */
-	const formatDate = (dateString) => {
+	const formatDate = (dateString: string): string => {
 		const date = new Date(dateString);
 		return new Intl.DateTimeFormat('en-US', {
 			year: 'numeric',
@@ -41,11 +18,7 @@
 		}).format(date);
 	};
 
-	/**
-	 * @description Truncate description
-	 * @param {string} text
-	 */
-	const truncateDescription = (text) => {
+	const truncateDescription = (text: string): string => {
 		if (!text) return '';
 		const maxLength = 500;
 		if (text.length <= maxLength) return text;

@@ -1,44 +1,30 @@
-<script>
-	import { Input, Button, ButtonGroup, Icon } from '@sveltestrap/sveltestrap';
+<script lang="ts">
+	import { Input, Button, Icon } from '@sveltestrap/sveltestrap';
 	import { isValidUrl } from '../validators';
 	import { t } from '../../../i18n';
 
-	/**
-	 * @typedef {Object} Props
-	 * @property { (url: string) => void } onClick
-	 * @property { () => void } onClear
-	 */
+	type Props = {
+		onClick: (url: string) => void;
+		onClear: () => void;
+	};
 
-	/** @type {Props} */
-	let { onClick, onClear } = $props();
+	let { onClick, onClear }: Props = $props();
 
-	/**
-	 * @type string
-	 */
 	let url = $state('');
 
-	/**
-	 * @description Input Field validation
-	 * @param {string} url
-	 */
-	const isInputInvalid = (url) => {
+	const disabled = $derived(url.trim().length === 0);
+
+	const isInputInvalid = (url: string): boolean => {
 		return !isValidUrl(url) && url.length > 0;
 	};
 
-	/**
-	 * @description Handle search on Enter key
-	 * @param {KeyboardEvent} event
-	 */
-	const handleKeyPress = (event) => {
+	const handleKeyPress = (event: KeyboardEvent): void => {
 		if (event.key === 'Enter') {
 			onClick(url);
 		}
 	};
 
-	/**
-	 * @description Clear search and reset parent state
-	 */
-	const handleClear = () => {
+	const handleClear = (): void => {
 		url = '';
 		onClear();
 	};
@@ -61,21 +47,19 @@
 			</div>
 		{/if}
 	</div>
-	<ButtonGroup>
-		<Button color="primary" size="lg" class="px-4 fw-medium" onclick={() => onClick(url)} role="search">
-			<Icon name="search" class="me-2" />
-			{$t('page.button.search')}
-		</Button>
-		<Button
-			outline
-			color="secondary"
-			size="lg"
-			class="px-4 fw-medium bg-transparent"
-			onclick={handleClear}
-			disabled={url.trim().length === 0}
-		>
-			<Icon name="x-lg" />
-		</Button>
-	</ButtonGroup>
+	<Button
+		outline
+		color="secondary"
+		size="lg"
+		class="px-4 fw-medium bg-transparent"
+		onclick={handleClear}
+		disabled={disabled}
+	>
+		<Icon name="x-lg" />
+	</Button>
+	<Button color="primary" size="lg" class="px-4 fw-medium" onclick={() => onClick(url)} role="search">
+		<Icon name="search" class="me-2" />
+		{$t('page.button.search')}
+	</Button>
 </div>
 
