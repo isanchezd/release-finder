@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input, Button, Icon } from '@sveltestrap/sveltestrap';
+	import { Input, Button, Icon, Form } from '@sveltestrap/sveltestrap';
 	import { isValidUrl } from '../validators';
 	import { t } from '../../../i18n';
 
@@ -18,48 +18,49 @@
 		return !isValidUrl(url) && url.length > 0;
 	};
 
-	const handleKeyPress = (event: KeyboardEvent): void => {
-		if (event.key === 'Enter') {
-			onClick(url);
-		}
+	const handleSubmit = (event: SubmitEvent): void => {
+		event.preventDefault();
+		onClick(url);
 	};
 
-	const handleClear = (): void => {
+	const handleReset = (): void => {
 		url = '';
 		onClear();
 	};
 </script>
 
-<div class="d-flex gap-3">
-	<div class="position-relative flex-fill">
-		<Input
-			type="text"
-			id="url"
-			class="form-control form-control-lg ps-5 {isInputInvalid(url) ? 'is-invalid' : ''}"
-			placeholder={$t('page.field.repository-url.placeholder')}
-			bind:value={url}
-			on:keypress={handleKeyPress}
-		/>
-		<Icon name="github" class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
-		{#if isInputInvalid(url)}
-			<div class="invalid-feedback d-block">
-				{$t('page.field.repository-url.error')}
-			</div>
-		{/if}
+<Form on:submit={handleSubmit}>
+	<div class="d-flex gap-3">
+		<div class="position-relative flex-fill">
+			<Input
+				type="text"
+				id="url"
+				class="form-control form-control-lg ps-5 {isInputInvalid(url) ? 'is-invalid' : ''}"
+				placeholder={$t('page.field.repository-url.placeholder')}
+				bind:value={url}
+			/>
+			<Icon name="github" class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
+			{#if isInputInvalid(url)}
+				<div class="invalid-feedback d-block">
+					{$t('page.field.repository-url.error')}
+				</div>
+			{/if}
+		</div>
+		<Button
+			type="reset"
+			outline
+			color="secondary"
+			size="lg"
+			class="px-4 fw-medium bg-transparent"
+			on:click={handleReset}
+			disabled={disabled}
+		>
+			<Icon name="x-lg" />
+		</Button>
+		<Button type="submit" color="primary" size="lg" class="px-4 fw-medium" disabled={disabled}>
+			<Icon name="search" class="me-2" />
+			{$t('page.button.search')}
+		</Button>
 	</div>
-	<Button
-		outline
-		color="secondary"
-		size="lg"
-		class="px-4 fw-medium bg-transparent"
-		onclick={handleClear}
-		disabled={disabled}
-	>
-		<Icon name="x-lg" />
-	</Button>
-	<Button color="primary" size="lg" class="px-4 fw-medium" onclick={() => onClick(url)} role="search">
-		<Icon name="search" class="me-2" />
-		{$t('page.button.search')}
-	</Button>
-</div>
+</Form>
 
