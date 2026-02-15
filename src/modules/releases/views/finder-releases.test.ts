@@ -28,7 +28,7 @@ describe('Finder Releases View test suite', () => {
 				target: { value: 'aaa' }
 			}
 		);
-		fireEvent.click(screen.getByRole('search'));
+		fireEvent.click(screen.getByText(translations.en['page.button.search']));
 
 		expect(getReleases).not.toHaveBeenCalled();
 
@@ -50,17 +50,17 @@ describe('Finder Releases View test suite', () => {
 			}
 		)
 		fireEvent.click(
-			screen.getByRole('search')
+			screen.getByText(translations.en['page.button.search'])
 		)
 
 		expect(getReleases).not.toHaveBeenCalled();
 		expect(
-			screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+			screen.queryByText(translations.en['page.button.filter'])
 		).toBeNull();
 		expect(screen.queryByRole('progressbar')).toBeNull();
 	});
 
-	test('When the repository input has a correct github url, the form filter and a releases list should be in the document', () => {
+	test('When the repository input has a correct github url, the form filter and a releases list should be in the document', async () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
 		const release = API_RESPONSE.find((release) => release.id === RELEASE.id);
@@ -68,85 +68,81 @@ describe('Finder Releases View test suite', () => {
 		// @ts-ignore
 		render(FinderReleases);
 
-		fireEvent.input(
-			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
-			{
-				target: { value: SUCESS_GITHUB_URL }
-			}
-		);
-		fireEvent.click(
-			screen.getByRole('search')
-		)
+		const input = screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']);
+		fireEvent.input(input, {
+			target: { value: SUCESS_GITHUB_URL }
+		});
+		
+		const form = input.closest('form');
+		if (form) {
+			await fireEvent.submit(form);
+		}
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(
-				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+				screen.queryByText(translations.en['page.button.filter'])
 			).toBeInTheDocument();
 		});
 
-		waitFor(() => {
+		await waitFor(() => {
 			const releaseName = release?.name ? release?.name : '';
 			expect(screen.queryByText(releaseName)).toBeInTheDocument();
 		});
 	});
 
-	test('When the repository input has a correct github url but the repo hasn´t releases, the form filter should be in the document but the releases list not to be in the document', () => {
+	test('When the repository input has a correct github url but the repo hasn´t releases, the form filter should be in the document but the releases list not to be in the document', async () => {
 		vi.mocked(getReleases).mockResolvedValue([]);
 
 		// @ts-ignore
 		render(FinderReleases);
 
-		fireEvent.input(
-			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
-			{
-				target: { value: GITHUB_URL_WITHOUT_RELEASES }
-			}
-		);
-		fireEvent.click(
-			screen.getByRole('search')
-		)
+		const input = screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']);
+		fireEvent.input(input, {
+			target: { value: GITHUB_URL_WITHOUT_RELEASES }
+		});
+		
+		const form = input.closest('form');
+		if (form) {
+			await fireEvent.submit(form);
+		}
 
 		expect(getReleases).toHaveBeenCalledWith('kilimchoi', 'engineering-blogs');
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(
-				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+				screen.queryByText(translations.en['page.button.filter'])
 			).toBeInTheDocument();
 		});
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(screen.queryByText(translations.en['page.no-results'])).toBeInTheDocument();
 		});
 	});
 
-	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
+	test('When the user puts in filter form and the value was in the list, the releases should be in the document', async () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
 		// @ts-ignore
 		render(FinderReleases);
 
-		fireEvent.input(
-			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
-			{
-				target: { value: SUCESS_GITHUB_URL }
-			}
-		);
-		fireEvent.click(
-			screen.getByRole('search')
-		)
+		const input = screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']);
+		fireEvent.input(input, {
+			target: { value: SUCESS_GITHUB_URL }
+		});
+		
+		const form = input.closest('form');
+		if (form) {
+			await fireEvent.submit(form);
+		}
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(
-				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+				screen.queryByText(translations.en['page.button.filter'])
 			).toBeInTheDocument();
-
-			fireEvent.click(
-				screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
-			);
 
 			fireEvent.input(
 				screen.getByPlaceholderText(translations.en['page.field.version.placeholder']),
@@ -155,40 +151,40 @@ describe('Finder Releases View test suite', () => {
 				}
 			);
 
+			fireEvent.click(
+				screen.getByText(translations.en['page.button.filter'])
+			);
+
 			expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 		});
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(screen.queryByText(RELEASE.name)).toBeInTheDocument();
 		});
 	});
 
-	test('When the user puts in filter form and the value was in the list, the releases should be in the document', () => {
+	test('When the user puts in filter form and the value was in the list, the releases should be in the document', async () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
 		// @ts-ignore
 		render(FinderReleases);
 
-		fireEvent.input(
-			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
-			{
-				target: { value: SUCESS_GITHUB_URL }
-			}
-		);
-		fireEvent.click(
-			screen.getByRole('search')
-		)
+		const input = screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']);
+		fireEvent.input(input, {
+			target: { value: SUCESS_GITHUB_URL }
+		});
+		
+		const form = input.closest('form');
+		if (form) {
+			await fireEvent.submit(form);
+		}
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(
-				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+				screen.queryByText(translations.en['page.button.filter'])
 			).toBeInTheDocument();
-
-			fireEvent.click(
-				screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
-			);
 
 			fireEvent.input(
 				screen.getByPlaceholderText(translations.en['page.field.version.placeholder']),
@@ -211,40 +207,40 @@ describe('Finder Releases View test suite', () => {
 				}
 			);
 
+			fireEvent.click(
+				screen.getByText(translations.en['page.button.filter'])
+			);
+
 			expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 		});
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(screen.queryByText(RELEASE.name)).toBeInTheDocument();
 		});
 	});
 
-	test('When the user puts in filters form and the values don´t match, the releases should be in the document', () => {
+	test('When the user puts in filters form and the values don´t match, the releases should be in the document', async () => {
 		vi.mocked(getReleases).mockResolvedValue(API_RESPONSE);
 
 		// @ts-ignore
 		render(FinderReleases);
 
-		fireEvent.input(
-			screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']),
-			{
-				target: { value: SUCESS_GITHUB_URL }
-			}
-		);
-		fireEvent.click(
-			screen.getByRole('search')
-		)
+		const input = screen.getByPlaceholderText(translations.en['page.field.repository-url.placeholder']);
+		fireEvent.input(input, {
+			target: { value: SUCESS_GITHUB_URL }
+		});
+		
+		const form = input.closest('form');
+		if (form) {
+			await fireEvent.submit(form);
+		}
 
 		expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(
-				screen.queryByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
+				screen.queryByText(translations.en['page.button.filter'])
 			).toBeInTheDocument();
-
-			fireEvent.click(
-				screen.getByText(`/${translations.en['page.button.filter']}/i`, { selector: 'button' })
-			);
 
 			fireEvent.input(
 				screen.getByPlaceholderText(translations.en['page.field.version.placeholder']),
@@ -267,10 +263,14 @@ describe('Finder Releases View test suite', () => {
 				}
 			);
 
+			fireEvent.click(
+				screen.getByText(translations.en['page.button.filter'])
+			);
+
 			expect(getReleases).toHaveBeenCalledWith('strapi', 'strapi');
 		});
 
-		waitFor(() => {
+		await waitFor(() => {
 			expect(screen.queryByText(RELEASE.name)).not.toBeInTheDocument();
 		});
 	});

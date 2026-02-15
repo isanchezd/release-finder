@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import SearchRepo from '../components/search-repo.svelte';
 	import Releases from '../components/releases.svelte';
 	import FilterForm from '../components/filter-form.svelte';
 	import Spinner from '../components/spinner.svelte';
+	import type { FormValues, Release } from '../types';
 
 	import { splitUrl } from '../../../utils/url';
 	import { isValidUrl, isDateBetweenInterval } from '../validators';
@@ -10,66 +11,16 @@
 
 	import { t } from '../../../i18n';
 
-	/**
-	 * @typedef Author
-	 * @property {string} login
-	 * @property { string } html_url
-	 */
+	let owner = $state('');
+	let repo = $state('');
 
-	/**
-	 * @typedef Release
-	 * @property {number} id
-	 * @property {string} name
-	 * @property {string} body
-	 * @property {string} string
-	 * @property {Author} author
-	 * @property {string} created_at
-	 */
-
-	/**
-	 * @typedef FormValues
-	 * @property {string} version
-	 * @property {string} from
-	 * @property {string} to
-	 * @property {string} description
-	 * @property {string} author
-	 */
-
-	/**
-	 *
-	 * @type string
-	 */
-	let owner;
-
-	/**
-	 *
-	 * @type string
-	 */
-	let repo;
-
-	/**
-	 *
-	 * @type boolean
-	 */
 	let isLoading = $state(true);
 
-	/**
-	 *
-	 * @type boolean
-	 */
 	let showReleases = $state(false);
 
-	/**
-	 *
-	 * @type { Release[] }
-	 */
-	let releases = $state([]);
+	let releases = $state<Release[]>([]);
 
-	/**
-	 * @description On Input event
-	 * @param {string} url
-	 */
-	const onClick = (url) => {
+	const onClick = (url: string): void => {
 		if (!isValidUrl(url)) {
 			return;
 		}
@@ -80,44 +31,31 @@
 		fetchReleases(owner, repo);
 	};
 
-	/**
-	 * @description On Input event
-	 * @param {string} owner,
-	 * @param {string} repo
-	 */
+	const onClear = (): void => {
+		owner = '';
+		repo = '';
+		releases = [];
+		showReleases = false;
+	};
 
-	const fetchReleases = async (owner, repo) => {
+	const fetchReleases = async (owner: string, repo: string): Promise<void> => {
 		isLoading = true;
 		try {
 			releases = await getReleases(owner, repo);
-		} catch (err) {
-			console.log(err);
+		} catch (error) {
+			console.error(error);
 		} finally {
 			isLoading = false;
 		}
 	};
 
-	/**
-	 * @description onSubmit function to handle the user´s click action on filter button
-	 * @param {FormValues} formValues
-	 */
-
-	const onSubmit = async (formValues) => {
+	const onSubmit = async (formValues: FormValues): Promise<void> => {
 		await fetchReleases(owner, repo);
 		const filteredReleases = releases.filter((release) => filterReleases(release, formValues));
 		releases = [...filteredReleases];
 	};
 
-	/**
-	 *
-	 * @param { Release } release
-	 * @param { FormValues } filter
-	 */
-
-	const filterReleases = (release, filter) => {
-		/**
-		 * @type {boolean[]}
-		 */
+	const filterReleases = (release: Release, filter: FormValues): boolean => {
 		const matchers = [];
 
 		if (filter.version) {
@@ -136,36 +74,62 @@
 			matchers.push(release.author.login.includes(filter.author));
 		}
 
-		const isMatch = matchers.every((matcher) => matcher === true);
-
-		if (isMatch) {
-			return release;
-		}
+		return matchers.every((matcher) => matcher === true);
 	};
 </script>
 
 <section class="flex-grow-1">
-	<div class="container">
-		<div class="row">
-			<div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
-				<SearchRepo {onClick} />
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-12 col-lg-10 col-xl-8">
+				<!-- Header Section -->
+				<div class="text-center mb-5">
+					<div class="d-flex align-items-center justify-content-center gap-3 mb-4">
+						<h1 class="display-4 fw-semibold">Release Finder</h1>
+					</div>
+					<p class="lead text-muted mx-auto" style="max-width: 42rem;">
+						Discover and track GitHub releases effortlessly. Enter any repository URL to explore its
+						release history and stay updated with the latest versions.
+					</p>
+				</div>
+
+				<!-- Search Section -->
+				<div class="card shadow-sm border mb-4">
+					<div class="card-body p-4">
+						<SearchRepo {onClick} {onClear} />
+					</div>
+				</div>
+
+				{#if showReleases}
+					<!-- Filter Section -->
+					<div class="card shadow-sm border mb-4">
+						<div class="card-body p-4">
+							<FilterForm {onSubmit} />
+						</div>
+					</div>
+
+					<!-- Loading State -->
+					{#if isLoading}
+						<Spinner />
+					{:else if releases.length > 0}
+						<!-- Releases List -->
+						<div class="mb-4">
+							<h2 class="h5 fw-semibold mb-4 d-flex align-items-center gap-2">
+								<span>Releases ({releases.length})</span>
+							</h2>
+							<Releases {releases} />
+						</div>
+					{:else}
+						<!-- No Results -->
+						<div class="card border bg-light">
+							<div class="card-body p-5 text-center">
+								<h3 class="h6 fw-semibold mb-2">{$t('page.no-results')}</h3>
+								<p class="small text-muted mb-0">Try adjusting your search criteria.</p>
+							</div>
+						</div>
+					{/if}
+				{/if}
 			</div>
 		</div>
-
-		{#if showReleases}
-			<div class="row">
-				<div class="col mt-2">
-					<FilterForm {onSubmit} />
-				</div>
-			</div>
-
-			{#if isLoading}
-				<Spinner />
-			{:else if releases.length > 0}
-				<Releases {releases} />
-			{:else}
-				<p>{$t('page.no-results')}</p>
-			{/if}
-		{/if}
 	</div>
 </section>

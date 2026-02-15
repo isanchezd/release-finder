@@ -1,4 +1,4 @@
-export default {
+const translations = {
 	en: {
 		'page.title': 'Release Finder',
 		'page.no-results': 'No releases with this criteria',
@@ -14,7 +14,13 @@ export default {
 		'page.field.description.placeholder': 'Piece of body',
 		'page.field.author': 'Author',
 		'page.field.author.placeholder': 'Author',
+		'page.button.search': 'Search',
 		'page.button.filter': 'Filter',
-		'page.created-by': 'Created by'
+		'page.button.clear': 'Clear',
+		'page.created-by': 'Created by',
 	}
-};
+} as const;
+
+export type Translations = typeof translations;
+
+export default translations;

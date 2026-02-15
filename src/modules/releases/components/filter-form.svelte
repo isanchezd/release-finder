@@ -1,29 +1,15 @@
-<script>
-	import { Form, FormGroup, Input, Label, Button } from '@sveltestrap/sveltestrap';
+<script lang="ts">
+	import { Input, Label, Button, Icon, Form } from '@sveltestrap/sveltestrap';
 	import { t } from '../../../i18n';
+	import type { FormValues } from '../types';
 
-	/**
-	 * @typedef FormValues
-	 * @property {string} version
-	 * @property {string} from
-	 * @property {string} to
-	 * @property {string} description
-	 * @property {string} author
-	 */
+	type Props = {
+		onSubmit: (formValues: FormValues) => Promise<void> | void;
+	};
 
-	
-	/**
-	 * @typedef {Object} Props
-	 * @property { (formValues: FormValues) => Promise<void> } onSubmit
-	 */
+	let { onSubmit }: Props = $props();
 
-	/** @type {Props} */
-	let { onSubmit } = $props();
-
-	/**
-	 * @type FormValues
-	 */
-	let formValues = $state({
+	let formValues = $state<FormValues>({
 		version: '',
 		from: '',
 		to: '',
@@ -31,80 +17,102 @@
 		author: ''
 	});
 
-	/**
-	 *
-	 * @param event {HTMLFormElement}
-	 */
-	const onClick = () => {
+	let showFilters = $state(true);
+	let formElement: HTMLFormElement | undefined = $state();
+
+	const clearFilters = (): void => {
+		formValues = {
+			version: '',
+			from: '',
+			to: '',
+			description: '',
+			author: ''
+		};
+	};
+
+	const handleSubmit = (event: SubmitEvent): void => {
+		event.preventDefault();
+		onSubmit(formValues);
+	};
+
+	const handleReset = (): void => {
+		clearFilters();
 		onSubmit(formValues);
 	};
 </script>
 
-<Form>
-	<div class="row">
-		<div class="col-12">
-			<div class="row">
-				<div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-					<FormGroup>
-						<b><Label for="url">{$t('page.field.version')}</Label></b>
+<div>
+	<div class="d-flex align-items-center justify-content-between mb-4">
+		<h3 class="h6 fw-semibold d-flex align-items-center gap-2 mb-0">
+			<Icon name="funnel" class="text-primary" />
+			Advanced Filters
+		</h3>
+		<Button color="link" size="sm" class="text-decoration-none fw-medium" onclick={() => (showFilters = !showFilters)}>
+			{showFilters ? 'Hide' : 'Show'} Filters
+		</Button>
+	</div>
+
+	{#if showFilters}
+		<Form onsubmit={handleSubmit}>
+			<div class="mb-4">
+				<div class="row g-3 mb-3">
+					<div class="col-12 col-md-6 col-lg-3">
+						<Label for="version" class="form-label small fw-medium">{$t('page.field.version')}</Label>
 						<Input
 							type="text"
-							id="release"
+							id="version"
+							class="form-control"
 							placeholder={$t('page.field.version.placeholder')}
 							bind:value={formValues.version}
 						/>
-					</FormGroup>
-				</div>
-				<div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-					<FormGroup>
-						<b><Label for="url">{$t('page.field.author')}</Label></b>
+					</div>
+
+					<div class="col-12 col-md-6 col-lg-3">
+						<Label for="author" class="form-label small fw-medium">{$t('page.field.author')}</Label>
 						<Input
 							type="text"
 							id="author"
+							class="form-control"
 							placeholder={$t('page.field.author.placeholder')}
 							bind:value={formValues.author}
 						/>
-					</FormGroup>
-				</div>
-			</div>
+					</div>
 
-			<div class="row">
-				<div class="col-6 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					<div class="row">
-						<div class="col">
-							<FormGroup>
-								<b><Label for="url">{$t('page.field.from')}</Label></b>
-								<Input type="date" id="from" bind:value={formValues.from} />
-							</FormGroup>
-						</div>
-						<div class="col">
-							<FormGroup>
-								<b><Label for="url">{$t('page.field.to')}</Label></b>
-								<Input type="date" id="to" bind:value={formValues.to} />
-							</FormGroup>
-						</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<Label for="from" class="form-label small fw-medium">{$t('page.field.from')}</Label>
+						<Input type="date" id="from" class="form-control" bind:value={formValues.from} />
+					</div>
+
+					<div class="col-12 col-md-6 col-lg-3">
+						<Label for="to" class="form-label small fw-medium">{$t('page.field.to')}</Label>
+						<Input type="date" id="to" class="form-control" bind:value={formValues.to} />
 					</div>
 				</div>
-			</div>
 
-			<div class="row">
-				<div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-					<FormGroup>
-						<b><Label for="url">{$t('page.field.description')}</Label></b>
+				<div class="row g-3 mb-3">
+					<div class="col-12">
+						<Label for="description" class="form-label small fw-medium">{$t('page.field.description')}</Label>
 						<Input
 							type="textarea"
-							id="body"
+							id="description"
+							class="form-control"
+							rows={2}
 							placeholder={$t('page.field.description.placeholder')}
 							bind:value={formValues.description}
 						/>
-					</FormGroup>
+					</div>
+				</div>
+
+				<div class="d-flex align-items-center justify-content-end gap-2 pt-2">
+					<Button type="submit" color="primary" class="fw-medium">
+						<Icon name="funnel-fill" class="me-2" />
+						{$t('page.button.filter')}
+					</Button>
+					<Button type="reset" color="primary" class="fw-medium" on:click={handleReset}>
+						{$t('page.button.clear')}
+					</Button>
 				</div>
 			</div>
-			<div class="row mt-2 text-center">
-				<div class="col">
-					<Button color="primary" onclick={onClick}>{$t('page.button.filter')}</Button>
-				</div>
-			</div>
-		</div>
-	</div>
-</Form>
+		</Form>
+	{/if}
+</div>
