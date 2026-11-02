@@ -1,5 +1,7 @@
 # Release Finder
 
+> **This repository is archived.** It is no longer maintained, and it does not accept new issues, pull requests, or contributions. It remains available as-is for reference.
+
 This repository contains the source code for the Release Finder web application.
 
 This project is a web application aimed at performing advanced search operations on releases generated in GitHub git repositories.
@@ -99,13 +101,7 @@ npm run test:e2e
 
 ## Contributing
 
-If you have any suggestions on how to make this project better, please fork the repository and create a PR. Don't forget to give it a star =)
-
-1. Fork the project
-2. Create a branch (git checkout -b feature/AmazingFeature)
-3. Commit your changes (git commit -m 'Add some AmazingFeature')
-4. Push to the branch (git push origin feature/AmazingFeature)
-5. Open a PR
+This project is archived and no longer accepts new issues, pull requests, or contributions. You are welcome to fork the repository and continue development on your own.
 
 ## License
 
